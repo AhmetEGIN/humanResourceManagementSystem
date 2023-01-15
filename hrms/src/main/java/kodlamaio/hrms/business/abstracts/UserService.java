@@ -7,4 +7,5 @@ import kodlamaio.hrms.core.utilities.results.Result;
 public interface UserService {
 	Result setVerify(int userId);
 	DataResult<User> getUser(int userId);
+	Result isEmailExists(String email);
 }

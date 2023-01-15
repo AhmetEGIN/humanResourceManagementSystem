@@ -9,6 +9,7 @@ import kodlamaio.hrms.business.abstracts.EmployeeService;
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.business.abstracts.HrmsAdminService;
 import kodlamaio.hrms.business.abstracts.UserService;
+import kodlamaio.hrms.business.constants.messages.Message;
 import kodlamaio.hrms.business.requests.employeeRequests.CreateEmployeeRequest;
 import kodlamaio.hrms.business.requests.employerRequests.CreateEmployerRequest;
 import kodlamaio.hrms.business.requests.employerRequests.UpdateEmployerRequest;
@@ -16,8 +17,10 @@ import kodlamaio.hrms.business.requests.hrmsAdminRequests.CreateHrmsAdminRequest
 import kodlamaio.hrms.business.responses.authResponses.AuthenticationResponse;
 import kodlamaio.hrms.core.entities.User;
 import kodlamaio.hrms.core.entities.enums.Role;
+import kodlamaio.hrms.core.utilities.business.BusinessRules;
 import kodlamaio.hrms.core.utilities.mapping.ModelMapperService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
@@ -57,16 +60,23 @@ public class AuthManager implements AuthService {
 
 	@Override
 	public DataResult<AuthenticationResponse> registerEmployee(CreateEmployeeRequest employeeRequest) {
-//		employeeRequest.setPassword(encodePassword(employeeRequest.getPassword()));
-		
+		var result = BusinessRules.run(
+				isPasswordAndConfirmPasswordEqual(employeeRequest.getPassword(), employeeRequest.getConfirmPassword()),
+				isEmailExists(employeeRequest.getEmail())
+				);
+		if (result != null) {
+			return new ErrorDataResult<>(result.getMessage());
+		}
 		employeeRequest.setUserRole(Role.EMPLOYEE);
+		employeeRequest.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
 //		User userToRegister = modelMapper.forRequest().map(employeeRequest, User.class);
 //		tokenHelper.createToken(userToRegister);
+		
 		employeeService.add(employeeRequest);
 		var user = User.builder()
 				.email(employeeRequest.getEmail())
-				.password(passwordEncoder.encode(employeeRequest.getPassword()))
-				.role(Role.EMPLOYEE)
+				.password(employeeRequest.getPassword())
+				.role(employeeRequest.getUserRole())
 				.build();
 				
 		var jwtToken = tokenHelper.generateToken(user);
@@ -120,5 +130,17 @@ public class AuthManager implements AuthService {
 //		String encodedPassword = bCryptPasswordEncoder.encode(password);
 //		return encodedPassword;
 //	}
+	private Result isPasswordAndConfirmPasswordEqual(String password, String confirmPassword) {
+		if (password.equals(confirmPassword)) {
+			return new SuccessResult();
+		}
+		return new ErrorResult(Message.passwordAndConfirmPasswordNotMatched);
+	}
+	
+	private Result isEmailExists(String email) {
+		Result result = this.userService.isEmailExists(email);
+		return result;
+		
+	}
 
 }

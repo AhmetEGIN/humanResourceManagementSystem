@@ -1,5 +1,8 @@
 package kodlamaio.hrms.business.concretes;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,9 +59,11 @@ public class UserManager implements UserService{
 		return new SuccessResult();
 	}
 	
-	private Result isEmailExists(String email) {
-		boolean state = this.userRepository.existsUserByEmailContainingIgnoreCase(email);
-		if (state) {
+	@Override
+	public Result isEmailExists(String email) {
+		boolean state = this.userRepository.existsUserByEmailEquals(email);
+		Optional<User> users = this.userRepository.findByEmail(email);
+		if (users.isPresent()) {
 			return new ErrorResult(Message.emailAlreadyExist);
 		}
 		return new SuccessResult();

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import kodlamaio.hrms.business.abstracts.EmployeeService;
+import kodlamaio.hrms.business.requests.employeeRequests.UpdateEmployeeRequest;
 import kodlamaio.hrms.business.responses.employeeResponses.GetAllEmployeeResponse;
 import kodlamaio.hrms.business.responses.employeeResponses.GetEmployeeResponse;
 import kodlamaio.hrms.core.utilities.results.DataResult;
@@ -55,5 +57,13 @@ public class EmployeesController {
 	public DataResult<GetEmployeeResponse> getEmployeeDetails(@RequestParam int employeeId){
 		return this.employeeService.getEmployeeDetails(employeeId);
 	}
-
+	
+	@PostMapping("/updateemployee")
+	public Result update(@RequestBody UpdateEmployeeRequest employeeRequest) {
+		return this.employeeService.update(employeeRequest);
+	}
+	
+	
+	
+	
 }

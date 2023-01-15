@@ -1,5 +1,6 @@
 package kodlamaio.hrms.business.concretes;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EmployeeService;
+import kodlamaio.hrms.business.abstracts.UserService;
 import kodlamaio.hrms.business.adapters.mernis.UserCheckService;
 import kodlamaio.hrms.business.constants.messages.Message;
 import kodlamaio.hrms.business.requests.employeeRequests.CreateEmployeeRequest;
@@ -29,31 +31,31 @@ public class EmployeeManager implements EmployeeService {
 	private EmployeeRepository employeeRepository;
 	private UserCheckService userCheckService;
 	private ModelMapperService mapperService;
-	private PasswordEncoder passwordEncoder;
+	private UserService userService;
 	@Autowired
 	public EmployeeManager(EmployeeRepository employeeRepository, UserCheckService userCheckService,
-			ModelMapperService mapperService, PasswordEncoder passwordEncoder) {
+			ModelMapperService mapperService, UserService userService,PasswordEncoder passwordEncoder) {
 		this.employeeRepository = employeeRepository;
 		this.userCheckService = userCheckService;
 		this.mapperService = mapperService;
-		this.passwordEncoder = passwordEncoder;
+		this.userService = userService;
 	}
 
 	@Override
 	public Result add(CreateEmployeeRequest employeeRequest) {
 //		List<Result> rules = new ArrayList<Result>();
-//		Collections.addAll(rules, isRequiredFieldsEmpty(employeeRequest), isPersonReal(employeeRequest),
-//				isEmailExist(employeeRequest.getEmail()), isIdentityNumberExist(employeeRequest.getIdentityNumber()),
-//				isPasswordAndConfirmPasswordEqual(employeeRequest.getPassword(), employeeRequest.getConfirmPassword()));
-		var result = BusinessRules.run(isRequiredFieldsEmpty(employeeRequest), isPersonReal(employeeRequest),
-				isEmailExist(employeeRequest.getEmail()),isPasswordAndConfirmPasswordEqual(employeeRequest.getPassword(), employeeRequest.getConfirmPassword()),
+//		Collections.addAll(isRequiredFieldsEmpty(employeeRequest), isPersonReal(employeeRequest.getFirstName(), employeeRequest.getLastName(), employeeRequest.getIdentityNumber(), employeeRequest.getBirthYear()),
+//				isEmailExist(employeeRequest.getEmail()), isIdentityNumberExist(employeeRequest.getIdentityNumber())
+//				);
+		var result = BusinessRules.run(
+				isRequiredFieldsEmpty(employeeRequest), 
+				isPersonReal(employeeRequest.getFirstName(),employeeRequest.getLastName().toString().trim(),employeeRequest.getIdentityNumber(), employeeRequest.getBirthYear()),
 				isIdentityNumberExist(employeeRequest.getIdentityNumber())
 				);
-//		if (result != null) {
-//			return new ErrorResult(result.getMessage());
-//		}
+		if (result != null) {
+			return new ErrorResult(result.getMessage());
+		}
 		Employee employee = mapperService.forRequest().map(employeeRequest, Employee.class);
-		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		employeeRepository.save(employee);
 		return new SuccessResult(Message.employeeAdded);
 	}
@@ -84,17 +86,30 @@ public class EmployeeManager implements EmployeeService {
 	@Override
 	public Result update(UpdateEmployeeRequest employeeRequest) {
 		Employee employee = employeeRepository.getReferenceById(employeeRequest.getId());
-
+		updateEmployee(employee, employeeRequest);
 //		Employee employee = modelMapper.map(getById(employeeRequest.getId()).getData(), Employee.class); 
 //		employee.setVerified(employeeRequest.isVerified()); 
+		var result = BusinessRules.run(
+				isPersonReal(employeeRequest.getFirstName(),employeeRequest.getLastName(),employeeRequest.getIdentityNumber(), employeeRequest.getBirthYear()),
+				isEmailExist(employeeRequest.getEmail()),
+				isIdentityNumberExist(employeeRequest.getIdentityNumber())
+				);
+		if (result != null) {
+			return new ErrorResult(result.getMessage());
+		}
+		
 		employeeRepository.save(employee);
-		return new SuccessResult();
+		return new SuccessResult(Message.USER_UPDATED);
 	}
 	@Override
 	public Result delete(int id) {
 		Employee employee = employeeRepository.getReferenceById(id);
 		employeeRepository.delete(employee);
 		return new SuccessResult(Message.employeeDeleted);
+	}
+	@Override
+	public DataResult<GetEmployeeResponse> getEmployeeDetails(int employeeId) {
+		return new SuccessDataResult<GetEmployeeResponse>(this.employeeRepository.getEmployeeDetails(employeeId));
 	}
 
 
@@ -109,18 +124,18 @@ public class EmployeeManager implements EmployeeService {
 		return new SuccessResult();
 	}
 
-	private Result isPersonReal(CreateEmployeeRequest employeeRequest) {
-		if (userCheckService.checkPerson(employeeRequest.getFirstName(), employeeRequest.getLastName(),
-				employeeRequest.getIdentityNumber(), employeeRequest.getBirthYear()).isSuccess()) {
-			return new SuccessResult();
+	private Result isPersonReal(String firstName, String lastName, String identityNumber, short birthYear) {
+		if (userCheckService.checkPerson(firstName, lastName, identityNumber, birthYear).isSuccess()) {
+			return new SuccessResult();	
 		}
 		return new ErrorResult(Message.personIsNotReal);
 	}
 
 	private Result isEmailExist(String email) {
-		if (employeeRepository.findByEmailEquals(email).isEmpty()) {
+		if (userService.isEmailExists(email).isSuccess()) {
 			return new SuccessResult();
 		}
+		
 		return new ErrorResult(Message.emailAlreadyExist);
 	}
 
@@ -130,23 +145,22 @@ public class EmployeeManager implements EmployeeService {
 		}
 		return new ErrorResult(Message.identityNumberAlreadyExist);
 	}
-
-	private Result isPasswordAndConfirmPasswordEqual(String password, String confirmPassword) {
-		if (password.equals(confirmPassword)) {
-			return new SuccessResult();
-		}
-		return new ErrorResult(Message.passwordAndConfirmPasswordNotMatched);
-	}
-
-	@Override
-	public DataResult<GetEmployeeResponse> getEmployeeDetails(int employeeId) {
-		return new SuccessDataResult<GetEmployeeResponse>(this.employeeRepository.getEmployeeDetails(employeeId));
-	}
-
-	@Override
-	public Employee getEmployee(int id) {
+	
+	private Result updateEmployee(Employee employee, UpdateEmployeeRequest employeeRequest) {
+		employee.setFirstName(employeeRequest.getFirstName());
+		employee.setLastName(employeeRequest.getLastName());
+		employee.setIdentityNumber(employeeRequest.getIdentityNumber());
+		employee.setBirthYear(employeeRequest.getBirthYear());
+		employee.setEmail(employeeRequest.getEmail());
+		employee.setPassword(employeeRequest.getPassword());
+		employee.setEmailVerified(employeeRequest.isVerified());
 		
-		return this.employeeRepository.getReferenceById(id);
+		return new SuccessResult();
 	}
+
+
+
+
+
 
 }

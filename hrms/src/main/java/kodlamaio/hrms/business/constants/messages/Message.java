@@ -1,6 +1,7 @@
 package kodlamaio.hrms.business.constants.messages;
 
 public class Message {
+	public static String USER_UPDATED = "Benutzer/in informationen wurden aktualisiert";
 	public static String EMAIL_MUST_BE_VERİFİED_FİRST = "Zuerst sollte Email von Nutzer verifiziert werden";
 	public static String verificationSuccessfull = "Doğrulama başarılı";
 	public static String verificationFailed = "Doğrulama başarısız";
