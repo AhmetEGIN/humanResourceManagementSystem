@@ -1,0 +1,36 @@
+2023-01-20 23:18:58,038 INFO [background-preinit] org.hibernate.validator.internal.util.Version: HV000001: Hibernate Validator 8.0.0.Final
+2023-01-20 23:18:58,197 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Starting HrmsApplication using Java 17.0.4.1 with PID 23592 (C:\Users\EGIN\git\humanResourceManagementSystem13012023\hrms\target\classes started by EGIN in C:\Users\EGIN\git\humanResourceManagementSystem13012023\hrms)
+2023-01-20 23:18:58,199 DEBUG [restartedMain] org.springframework.boot.StartupInfoLogger: Running with Spring Boot v3.0.1, Spring v6.0.3
+2023-01-20 23:18:58,202 INFO [restartedMain] org.springframework.boot.SpringApplication: No active profile set, falling back to 1 default profile: "default"
+2023-01-20 23:18:58,350 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-01-20 23:18:58,352 INFO [restartedMain] org.springframework.boot.logging.DeferredLog: For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-01-20 23:19:00,747 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-01-20 23:19:01,041 INFO [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate: Finished Spring Data repository scanning in 275 ms. Found 17 JPA repository interfaces.
+2023-01-20 23:19:02,948 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat initialized with port(s): 8080 (http)
+2023-01-20 23:19:02,972 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing ProtocolHandler ["http-nio-8080"]
+2023-01-20 23:19:02,975 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting service [Tomcat]
+2023-01-20 23:19:02,976 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting Servlet engine: [Apache Tomcat/10.1.4]
+2023-01-20 23:19:03,165 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Initializing Spring embedded WebApplicationContext
+2023-01-20 23:19:03,171 INFO [restartedMain] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext: Root WebApplicationContext: initialization completed in 4812 ms
+2023-01-20 23:19:03,532 INFO [restartedMain] org.hibernate.jpa.internal.util.LogHelper: HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-01-20 23:19:03,689 INFO [restartedMain] org.hibernate.Version: HHH000412: Hibernate ORM core version 6.1.6.Final
+2023-01-20 23:19:04,071 WARN [restartedMain] org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl: HHH90000021: Encountered deprecated setting [javax.persistence.validation.mode], use [jakarta.persistence.validation.mode] instead
+2023-01-20 23:19:04,147 WARN [restartedMain] org.hibernate.boot.internal.MetadataBuilderImpl$MetadataBuildingOptionsImpl: HHH90000021: Encountered deprecated setting [javax.persistence.sharedCache.mode], use [jakarta.persistence.sharedCache.mode] instead
+2023-01-20 23:19:04,464 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Starting...
+2023-01-20 23:19:05,018 INFO [restartedMain] com.zaxxer.hikari.pool.HikariPool: HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2856e9d2
+2023-01-20 23:19:05,023 INFO [restartedMain] com.zaxxer.hikari.HikariDataSource: HikariPool-1 - Start completed.
+2023-01-20 23:19:05,122 INFO [restartedMain] org.hibernate.engine.jdbc.dialect.internal.DialectFactoryImpl: HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2023-01-20 23:19:08,662 INFO [restartedMain] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-01-20 23:19:08,681 INFO [restartedMain] org.springframework.orm.jpa.AbstractEntityManagerFactoryBean: Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-01-20 23:19:09,529 DEBUG [restartedMain] org.springframework.web.filter.GenericFilterBean: Filter 'jwtAuthenticationFilter' configured for use
+2023-01-20 23:19:12,355 WARN [restartedMain] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-01-20 23:19:14,212 INFO [restartedMain] org.springframework.security.web.DefaultSecurityFilterChain: Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ab1acff, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f120583, org.springframework.security.web.context.SecurityContextHolderFilter@21357666, org.springframework.security.web.header.HeaderWriterFilter@1e0d289c, org.springframework.security.web.authentication.logout.LogoutFilter@38b48c3, kodlamaio.hrms.core.utilities.security.jwt.JwtAuthenticationFilter@6147bb3a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@23096323, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@64f71291, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@e409db0, org.springframework.security.web.session.SessionManagementFilter@7e8c70b6, org.springframework.security.web.access.ExceptionTranslationFilter@7afe0870, org.springframework.security.web.access.intercept.AuthorizationFilter@23b2d48e]
+2023-01-20 23:19:14,881 INFO [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer: LiveReload server is running on port 35729
+2023-01-20 23:19:14,914 INFO [restartedMain] org.apache.juli.logging.DirectJDKLog: Starting ProtocolHandler ["http-nio-8080"]
+2023-01-20 23:19:14,973 INFO [restartedMain] org.springframework.boot.web.embedded.tomcat.TomcatWebServer: Tomcat started on port(s): 8080 (http) with context path ''
+2023-01-20 23:19:15,002 INFO [restartedMain] org.springframework.boot.StartupInfoLogger: Started HrmsApplication in 17.668 seconds (process running for 19.554)
+2023-01-20 23:19:15,012 INFO [restartedMain] kodlamaio.hrms.HrmsApplication: System started
+2023-01-20 23:20:08,705 INFO [http-nio-8080-exec-2] org.apache.juli.logging.DirectJDKLog: Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-01-20 23:20:08,706 INFO [http-nio-8080-exec-2] org.springframework.web.servlet.FrameworkServlet: Initializing Servlet 'dispatcherServlet'
+2023-01-20 23:20:08,712 INFO [http-nio-8080-exec-2] org.springframework.web.servlet.FrameworkServlet: Completed initialization in 5 ms
+2023-01-20 23:20:08,977 INFO [http-nio-8080-exec-2] kodlamaio.hrms.webApi.Controllers.CitiesController: Şehir eklendi

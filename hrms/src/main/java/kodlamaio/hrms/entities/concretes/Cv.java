@@ -26,36 +26,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "cvs")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "Lazy"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "Lazy" })
 public class Cv {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@ManyToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "employee_id", foreignKey = @ForeignKey(name = "employee_id"), referencedColumnName = "id")
 	private Employee employee;
-	
-	@OneToOne(mappedBy = "cv",cascade = CascadeType.REMOVE)
+
+	@OneToOne(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private CoverLetter coverLetter;
-	
-	@OneToOne(mappedBy = "cv",cascade = CascadeType.REMOVE)
-	private GithubAccount githubAccount; 
-	
-	@OneToOne(mappedBy = "cv",cascade = CascadeType.REMOVE)
+
+	@OneToOne(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private GithubAccount githubAccount;
+
+	@OneToOne(mappedBy = "cv", cascade = CascadeType.REMOVE)
 	private LinkedinAccount linkedinAccount;
-	
+
 	@OneToMany(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<School> schools;
-	
+
 	@OneToMany(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<JobExperience> jobExperiences;
-	
+
 	@OneToMany(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Language> languages;
-	
+
 	@OneToMany(mappedBy = "cv", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private List<Technology> technologies;
 }

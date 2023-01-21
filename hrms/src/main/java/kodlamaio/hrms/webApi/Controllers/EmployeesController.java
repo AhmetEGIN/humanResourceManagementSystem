@@ -2,13 +2,14 @@ package kodlamaio.hrms.webApi.Controllers;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import kodlamaio.hrms.business.abstracts.EmployeeService;
 import kodlamaio.hrms.business.requests.employeeRequests.UpdateEmployeeRequest;
 import kodlamaio.hrms.business.responses.employeeResponses.GetAllEmployeeResponse;
@@ -22,6 +23,7 @@ import kodlamaio.hrms.core.utilities.results.SuccessResult;
 
 @RestController
 @RequestMapping("/api/employee")
+@CrossOrigin
 public class EmployeesController {
 	private EmployeeService employeeService;
 

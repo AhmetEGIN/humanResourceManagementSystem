@@ -1,6 +1,5 @@
 package kodlamaio.hrms.business.concretes;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import kodlamaio.hrms.business.constants.messages.Message;
 import kodlamaio.hrms.core.dataAccess.UserRepository;
 import kodlamaio.hrms.core.entities.User;
 import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorDataResult;
 import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
@@ -24,18 +24,6 @@ public class UserManager implements UserService{
 	public UserManager(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
-
-
-//	@Override
-//	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//		 return (UserDetails) userRepository.findByEmail(email)
-//	                .orElseThrow(() ->
-//	                        new UsernameNotFoundException(
-//	                                String.format("User not found", email)));
-//		
-//	}
-//	
-
 
 	public Result setVerify(int userId) {
 		User userToUpdate = this.userRepository.getReferenceById(userId);
@@ -67,6 +55,17 @@ public class UserManager implements UserService{
 			return new ErrorResult(Message.emailAlreadyExist);
 		}
 		return new SuccessResult();
+	}
+
+
+	@Override
+	public DataResult<User> getByEmail(String email) {
+		var user = this.userRepository.findByEmail(email).orElseThrow();
+		if (user == null) {
+			return new ErrorDataResult<>(Message.USER_NOT_FOUND);
+		}
+		return new SuccessDataResult<User>(user);
+		
 	}
 
 

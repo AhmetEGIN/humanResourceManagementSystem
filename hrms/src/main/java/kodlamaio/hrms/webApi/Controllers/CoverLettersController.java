@@ -19,7 +19,7 @@ import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 
 @RestController
-@RequestMapping("/api/coverLetter")
+@RequestMapping("/api/coverletter")
 public class CoverLettersController {
 	private CoverLetterService coverLetterService;
 

@@ -34,11 +34,12 @@ public class EmployeeManager implements EmployeeService {
 	private UserService userService;
 	@Autowired
 	public EmployeeManager(EmployeeRepository employeeRepository, UserCheckService userCheckService,
-			ModelMapperService mapperService, UserService userService,PasswordEncoder passwordEncoder) {
+			ModelMapperService mapperService, UserService userService) {
 		this.employeeRepository = employeeRepository;
 		this.userCheckService = userCheckService;
 		this.mapperService = mapperService;
 		this.userService = userService;
+		
 	}
 
 	@Override
@@ -71,15 +72,6 @@ public class EmployeeManager implements EmployeeService {
 	@Override
 	public DataResult<GetEmployeeResponse> getById(int id) {
 		GetEmployeeResponse getEmployeeResponse = this.mapperService.forResponse().map(employeeRepository.getReferenceById(id), GetEmployeeResponse.class);
-//		Employee employee = employeeRepository.getReferenceById(id);
-//		GetEmployeeResponse getEmployeeResponse = new GetEmployeeResponse();
-//		getEmployeeResponse.setId(employee.getId());
-//		getEmployeeResponse.setBirthYear(employee.getBirthYear());
-//		getEmployeeResponse.setEmail(employee.getEmail());
-//		getEmployeeResponse.setFirstName(employee.getFirstName());
-//		getEmployeeResponse.setLastName(employee.getLastName());
-//		getEmployeeResponse.setPassword(employee.getPassword());
-//		getEmployeeResponse.setIdentityNumber(employee.getIdentityNumber());
 		return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse);
 	}
 
@@ -87,8 +79,7 @@ public class EmployeeManager implements EmployeeService {
 	public Result update(UpdateEmployeeRequest employeeRequest) {
 		Employee employee = employeeRepository.getReferenceById(employeeRequest.getId());
 		updateEmployee(employee, employeeRequest);
-//		Employee employee = modelMapper.map(getById(employeeRequest.getId()).getData(), Employee.class); 
-//		employee.setVerified(employeeRequest.isVerified()); 
+
 		var result = BusinessRules.run(
 				isPersonReal(employeeRequest.getFirstName(),employeeRequest.getLastName(),employeeRequest.getIdentityNumber(), employeeRequest.getBirthYear()),
 				isEmailExist(employeeRequest.getEmail()),
@@ -140,7 +131,7 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	private Result isIdentityNumberExist(String identityNumber) {
-		if (employeeRepository.findByIdentityNumberEquals(identityNumber).isEmpty()) {
+		if (!employeeRepository.existsEmployeeByIdentityNumberEquals(identityNumber)) {
 			return new SuccessResult();
 		}
 		return new ErrorResult(Message.identityNumberAlreadyExist);

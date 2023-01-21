@@ -12,6 +12,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	
 	List<Employee> findByEmailEquals(String email);
 	List<Employee> findByIdentityNumberEquals(String identityNumber);
+	boolean existsEmployeeByIdentityNumberEquals(String identityNumber);
 	
 	@Query("Select new kodlamaio.hrms.business.responses.employeeResponses.GetEmployeeResponse(e.id, e.firstName, e.lastName, e.identityNumber, e.birthYear, e.email, e.password, i.imagePath) From Employee e Inner Join e.images i where e.id=:employeeId ")
 	GetEmployeeResponse getEmployeeDetails(int employeeId);

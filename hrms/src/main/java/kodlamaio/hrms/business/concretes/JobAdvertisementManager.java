@@ -61,17 +61,6 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 
 	@Override
 	public DataResult<GetJobAdvertisementResponse> getById(int id) {
-//		JobAdvertisement jobAdvertisement = this.adverstisementRepository.getReferenceById(id);
-//		GetJobAdvertisementResponse getJobAdvertisement = new GetJobAdvertisementResponse();
-//		getJobAdvertisement.setDeadline(jobAdvertisement.getDeadline());
-//		getJobAdvertisement.setDescription(jobAdvertisement.getDescription());
-//		getJobAdvertisement.setMaxSalary(jobAdvertisement.getMaxSalary());
-//		getJobAdvertisement.setMinSalary(jobAdvertisement.getMinSalary());
-//		getJobAdvertisement.setVacantPositionCount(jobAdvertisement.getVacantPositionCount());
-//		getJobAdvertisement.setId(jobAdvertisement.getId());
-//		getJobAdvertisement.setCityResponse(modelMapper.map(jobAdvertisement.getCity(),GetCityResponse.class));
-//		getJobAdvertisement.setPositionResponse(modelMapper.map(jobAdvertisement.getPosition(),GetPositionResponse.class));
-//		getJobAdvertisement.setEmployerResponse(modelMapper.map(jobAdvertisement.getEmployer(),GetEmployerResponse.class));
 
 		JobAdvertisement jobAdvertisement = this.adverstisementRepository.getReferenceById(id);
 		GetJobAdvertisementResponse advertisementResponse = this.modelMapperService.forResponse().map(jobAdvertisement, GetJobAdvertisementResponse.class);

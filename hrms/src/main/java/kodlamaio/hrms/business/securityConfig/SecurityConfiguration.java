@@ -2,6 +2,7 @@ package kodlamaio.hrms.business.securityConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 	private final JwtAuthenticationFilter jwtAuthenticatoinFilter;
@@ -24,10 +26,34 @@ public class SecurityConfiguration {
 		httpSecurity.csrf()
 		.disable()
 		.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/api/amployee/getall").hasRole("EMPLOYEE")
-				.requestMatchers("/api/employee/**").permitAll()
+				.requestMatchers("/api/employee/getall").hasRole("EMPLOYEE")
+				.requestMatchers(
+						"/api/employee/**",
+						"/api/employer/**",
+						"/api/city/**",
+						"/api/coverletter/**",
+						"/api/cv/**",
+						"/api/githubAccount/**",
+						"/api/image/**",
+						"/api/jobadvertisement/**",
+						"/api/jobExperience/**",
+						"/api/language/**",
+						"/api/linkedinAccount/**",
+						"/api/position/**",
+						"/api/school/**",
+						"/api/technology/**",
+						"/v3/api-docs",
+						"/swagger-resources/**",
+						"/swagger-ui.html",
+						"/swagger-ui/**",
+						"/swagger-ui/index.html",
+						"/webjars/**",
+						"/swagger.json",
+						"/configuration/ui",
+						"/configuration/security"
+						).permitAll()
+				.requestMatchers("/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
-				.requestMatchers("/api/cv/**").permitAll()
 				.anyRequest()
 				.authenticated()
 				)
@@ -40,6 +66,7 @@ public class SecurityConfiguration {
 		
 		return httpSecurity.build();
 	}
+	
 	
 	
 }

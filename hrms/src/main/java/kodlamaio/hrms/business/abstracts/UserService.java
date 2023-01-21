@@ -8,4 +8,5 @@ public interface UserService {
 	Result setVerify(int userId);
 	DataResult<User> getUser(int userId);
 	Result isEmailExists(String email);
+	DataResult<User> getByEmail(String email);
 }

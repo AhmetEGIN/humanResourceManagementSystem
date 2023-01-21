@@ -36,10 +36,7 @@ public class EmployerManager implements EmployerService {
 
 	@Override
 	public Result add(CreateEmployerRequest employerRequest) {
-//		List<Result> rules = new ArrayList<Result>();
-//		Collections.addAll(rules,
-//				checkEmailContainWebSiteDomain(employerRequest.getWebSite(), employerRequest.getEmail()),
-//				checkIfEmailAlreadyExist(employerRequest.getEmail()));
+
 		var result = BusinessRules.run(checkEmailContainWebSiteDomain(employerRequest.getWebSite(), employerRequest.getEmail()),
 				checkIfEmailAlreadyExist(employerRequest.getEmail()));
 		if (result == null) {
