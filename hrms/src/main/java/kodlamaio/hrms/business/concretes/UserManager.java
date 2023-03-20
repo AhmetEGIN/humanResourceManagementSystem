@@ -52,7 +52,7 @@ public class UserManager implements UserService{
 		boolean state = this.userRepository.existsUserByEmailEquals(email);
 		Optional<User> users = this.userRepository.findByEmail(email);
 		if (users.isPresent()) {
-			return new ErrorResult(Message.emailAlreadyExist);
+			return new ErrorResult(Message.EMAIL_ALREADY_EXISTS);
 		}
 		return new SuccessResult();
 	}

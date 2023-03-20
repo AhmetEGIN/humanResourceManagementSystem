@@ -56,7 +56,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		JobAdvertisement advertisement = modelMapperService.forRequest().map(jobAdvertisement, JobAdvertisement.class);
 		advertisement.setId(0);
 		this.adverstisementRepository.save(advertisement);
-		return new SuccessResult(Message.jobAdvertisementAdded);
+		return new SuccessResult(Message.JOB_ADVERTISEMENT_ADDED);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		List<GetAllJobAdvertisementResponse> getAllJobAdvertisementResponses = this.adverstisementRepository.findAll().stream().map(
 				jobAdvertisement -> this.modelMapperService.forResponse().map(jobAdvertisement, GetAllJobAdvertisementResponse.class)).collect(Collectors.toList());
 						
-		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(getAllJobAdvertisementResponses, Message.jobAdvertisementsListed);
+		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(getAllJobAdvertisementResponses, Message.JOB_ADVERTISEMENT_LISTED);
 
 	}
 
@@ -89,7 +89,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 //			getAllJobAdvertisementResponses.add(this.modelMapperService.forResponse().map(advertisement, GetAllJobAdvertisementResponse.class));
 //		}
 		
-		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(getAllJobAdvertisementResponses, Message.activeJobAdvertisementListed);
+		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(getAllJobAdvertisementResponses, Message.ACTIVE_JOB_ADVERTISEMENT_LISTED);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		List<JobAdvertisement> jobAdvertisements = this.adverstisementRepository.getByEmployer_Id(employerId);
 		List<GetAllJobAdvertisementResponse> jobAdvertisementResponses = new ArrayList<GetAllJobAdvertisementResponse>();
 		jobAdvertisementResponses = jobAdvertisements.stream().map(advertisement->this.modelMapperService.forResponse().map(advertisement, GetAllJobAdvertisementResponse.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(jobAdvertisementResponses, Message.jobAdvertisementsByEmployerListed);
+		return new SuccessDataResult<List<GetAllJobAdvertisementResponse>>(jobAdvertisementResponses, Message.JOB_ADVERTISEMENTS_BY_EMPLOYER_LISTED);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		JobAdvertisement jobAdvertisement = this.adverstisementRepository.getReferenceById(jobId);
 		jobAdvertisement.setActive(state);
 		this.adverstisementRepository.save(jobAdvertisement);
-		return new SuccessResult(Message.stateOfBeingActiveChanged);
+		return new SuccessResult(Message.STATE_OF_BEING_ACTIVE_CHANGED);
 	}
 
 	@Override

@@ -30,7 +30,7 @@ public class CityManager implements CityService {
 	public Result add(CreateCityRequest cityRequest) {
 		City city = modelMapper.map(cityRequest, City.class);
 		this.cityRepository.save(city);
-		return new SuccessResult(Message.cityAdded);
+		return new SuccessResult(Message.CITY_ADDED);
 	}
 
 	@Override

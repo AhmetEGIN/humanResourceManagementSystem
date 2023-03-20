@@ -46,6 +46,7 @@ public class AuthManager implements AuthService {
 	private PasswordEncoder passwordEncoder;
 	private AuthenticationManager authenticationManager;
 
+
 	@Autowired
 	public AuthManager(EmployeeService employeeService, EmployerService employerService,
 			VerificationService verificationService, VerficationByHrmsService verficationByHrmsService,
@@ -61,6 +62,7 @@ public class AuthManager implements AuthService {
 		this.tokenHelper = tokenHelper;
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager = authenticationManager;
+
 	}
 
 	@Override
@@ -68,8 +70,7 @@ public class AuthManager implements AuthService {
 	public DataResult<AuthenticationResponse> registerEmployee(CreateEmployeeRequest employeeRequest) {
 		var result = BusinessRules.run(
 				isPasswordAndConfirmPasswordEqual(employeeRequest.getPassword(), employeeRequest.getConfirmPassword()),
-				isEmailExists(employeeRequest.getEmail())
-				);
+				isEmailExists(employeeRequest.getEmail()));
 		if (result != null) {
 			return new ErrorDataResult<>(result.getMessage());
 		}
@@ -77,69 +78,61 @@ public class AuthManager implements AuthService {
 		employeeRequest.setPassword(passwordEncoder.encode(employeeRequest.getPassword()));
 //		User userToRegister = modelMapper.forRequest().map(employeeRequest, User.class);
 //		tokenHelper.createToken(userToRegister);
-		
+
 		var register = employeeService.add(employeeRequest);
 		if (!register.isSuccess()) {
 			return new ErrorDataResult<AuthenticationResponse>(register.getMessage());
 		}
-		var user = User.builder()
-				.email(employeeRequest.getEmail())
-				.password(employeeRequest.getPassword())
-				.role(employeeRequest.getUserRole())
-				.build();
-				
+		var user = User.builder().email(employeeRequest.getEmail()).password(employeeRequest.getPassword())
+				.role(employeeRequest.getUserRole()).build();
+
 		var jwtToken = tokenHelper.generateToken(user);
 		var authenticationResponse = AuthenticationResponse.builder().token(jwtToken).build();
 		return new SuccessDataResult<AuthenticationResponse>(authenticationResponse);
-		
 
 	}
+
+
 
 	@Override
 	@Transactional
 	public DataResult<AuthenticationResponse> registerEmployer(CreateEmployerRequest employerRequest) {
 		var result = BusinessRules.run(
 				isPasswordAndConfirmPasswordEqual(employerRequest.getPassword(), employerRequest.getConfirmPassword()),
-				isEmailExists(employerRequest.getEmail())
-				);
+				isEmailExists(employerRequest.getEmail()));
 		if (result != null) {
 			return new ErrorDataResult<>(result.getMessage());
 		}
 		employerRequest.setUserRole(Role.EMPLOYER);
 		employerRequest.setPassword(passwordEncoder.encode(employerRequest.getPassword()));
 		employerService.add(employerRequest);
-		var user = User.builder()
-				.email(employerRequest.getEmail())
-				.password(employerRequest.getPassword())
-				.role(employerRequest.getUserRole())
-				.build();
-				
+		var user = User.builder().email(employerRequest.getEmail()).password(employerRequest.getPassword())
+				.role(employerRequest.getUserRole()).build();
+
 		var jwtToken = tokenHelper.generateToken(user);
 		var authenticationResponse = AuthenticationResponse.builder().token(jwtToken).build();
 		return new SuccessDataResult<AuthenticationResponse>(authenticationResponse);
 
 	}
-	
+
 	@Override
 	@Transactional
 	public DataResult<AuthenticationResponse> registerHrmsAdmin(CreateHrmsAdminRequest hrmsAdminRequest) {
 		hrmsAdminRequest.setUserRole(Role.ADMİN);
 		hrmsAdminRequest.setPassword(passwordEncoder.encode(hrmsAdminRequest.getPassword()));
 		hrmsAdminService.add(hrmsAdminRequest);
-		var user = User.builder()
-				.email(hrmsAdminRequest.getEmail())
-				.password(hrmsAdminRequest.getPassword())
-				.role(hrmsAdminRequest.getUserRole())
-				.build();
-				
+		var user = User.builder().email(hrmsAdminRequest.getEmail()).password(hrmsAdminRequest.getPassword())
+				.role(hrmsAdminRequest.getUserRole()).build();
+
 		var jwtToken = tokenHelper.generateToken(user);
 		var authenticationResponse = AuthenticationResponse.builder().token(jwtToken).build();
 		return new SuccessDataResult<AuthenticationResponse>(authenticationResponse);
 
 	}
-	
-	public DataResult<AuthenticationResponse> login(LoginRequest loginRequest){
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+	public DataResult<AuthenticationResponse> login(LoginRequest loginRequest) {
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		var user = this.userService.getByEmail(loginRequest.getEmail());
 		if (!user.isSuccess()) {
 			return new ErrorDataResult<AuthenticationResponse>(user.getMessage());
@@ -147,13 +140,11 @@ public class AuthManager implements AuthService {
 		if (!passwordEncoder.encode(loginRequest.getPassword()).equals(user.getData().getPassword())) {
 			return new ErrorDataResult<AuthenticationResponse>(Message.WRONG_PASSWORD);
 		}
-		
 
-		
 		String jwtToken = tokenHelper.generateToken(user.getData());
 		AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwtToken);
 		return new SuccessDataResult<AuthenticationResponse>(authenticationResponse, Message.LOGIN_SUCCESSFUL);
-		
+
 	}
 
 	@Override
@@ -169,8 +160,8 @@ public class AuthManager implements AuthService {
 	@Override
 	public Result verifyEmployer(int userId) {
 		if (verficationByHrmsService.isVerifiedFromHrms().isSuccess()) {
-			UpdateEmployerRequest employerRequest = modelMapper.forResponse().map(employerService.getById(userId).getData(),
-					UpdateEmployerRequest.class);
+			UpdateEmployerRequest employerRequest = modelMapper.forResponse()
+					.map(employerService.getById(userId).getData(), UpdateEmployerRequest.class);
 			employerRequest.setVerified(true);
 			var result = employerService.update(employerRequest);
 			return new SuccessResult(result.getMessage());
@@ -178,21 +169,18 @@ public class AuthManager implements AuthService {
 		return new ErrorResult();
 	}
 
-	
-	
-	
 	// private codes
 	private Result isPasswordAndConfirmPasswordEqual(String password, String confirmPassword) {
 		if (password.equals(confirmPassword)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.passwordAndConfirmPasswordNotMatched);
+		return new ErrorResult(Message.PASSWORD_AND_CONFIRM_PASSWORD_NOT_MATCHED);
 	}
-	
+
 	private Result isEmailExists(String email) {
 		Result result = this.userService.isEmailExists(email);
 		return result;
-		
+
 	}
 
 }

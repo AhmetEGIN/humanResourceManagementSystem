@@ -25,6 +25,8 @@ import lombok.NoArgsConstructor;
 @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")
 @EqualsAndHashCode(callSuper = false)
 public class Employee extends User {
+	// Burada Employee subclass'ının User superclass'ının primary key ini foreign key olarak kullanıyoruz.
+	// TODO: EqualsAndHashCode araştır.
 
 	
 	@Column(name = "first_name")

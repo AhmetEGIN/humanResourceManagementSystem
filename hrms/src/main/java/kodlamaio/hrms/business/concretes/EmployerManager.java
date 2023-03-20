@@ -85,14 +85,14 @@ public class EmployerManager implements EmployerService {
 		if (email.contains(webSite)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.emailMustContaionWebSiteDomain);
+		return new ErrorResult(Message.EMAIL_MUST_CONTAİN_WEB_SITE_DOMAIN);
 	}
 
 	private Result checkIfEmailAlreadyExist(String email) {
 		if (!employerRepository.existsEmployerByEmailContainingIgnoreCase(email)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.emailAlreadyExist);
+		return new ErrorResult(Message.EMAIL_ALREADY_EXISTS);
 	}
 
 

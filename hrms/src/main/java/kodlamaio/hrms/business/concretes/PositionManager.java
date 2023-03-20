@@ -56,7 +56,7 @@ public class PositionManager implements PositionService {
 		Position position = this.modelMapperService.forRequest().map(positionRequest, Position.class);
 		position.setId(0);
 		this.positionRepository.save(position);
-		return new SuccessResult(Message.positonAdded);
+		return new SuccessResult(Message.POSITION_ADDED);
 
 	}
 
@@ -71,7 +71,7 @@ public class PositionManager implements PositionService {
 		if (!positionRepository.existsPositionByName(positonName)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.positionNameAlreadyExist);
+		return new ErrorResult(Message.POSITION_NAME_ALREADY_EXIST);
 	}
 
 }

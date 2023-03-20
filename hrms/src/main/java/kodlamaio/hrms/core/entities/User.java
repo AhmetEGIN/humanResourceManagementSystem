@@ -42,6 +42,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails {
+	//Bir entity' nin inherit edilebilmesi için bu class'a Inheritance anotasyonunu eklemeliyiz
+	// Inheritance yapılan entity'lerde farklı tablo stratejileri vardır. Single-Table, Joined, Table-Per-Class
+	// Joined en çok kullanılan yöntemdir. Veriler farklı tablolarda tutulur. 
+	// Ata ve kalıtılan sınıflar birbirlerine foreign key ile bağlanır. Yani veri normalizasyona tabi tutulur.
+	// Superclasslardaki fieldlar subclass ların tablosunda olmaz.
+	// Subclass ta da PrimaryKeyJoinColumn anotasyonunu tanımlamamız gerekir.
+	
+	//SingleTable -- Eğer bir strategy belirlemezsek default olarak bu seçilidir.
+	// Veriler aynı tabloda saklanır. superclass ve bu class'ı extend eden classların fieldları bir tablo içerisinde olur.
+	// Ata sınıfta @DiscriminatorColumn ile tipleri ayırt etmek için kullanılacak sütun ismi belirtilir. 
+    // Kalıtan sınıftaysa @DiscriminatorValue ile tipi ayırt etmek için kullanılacak değer belirtilir.
+	
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

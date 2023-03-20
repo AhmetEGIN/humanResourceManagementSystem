@@ -14,6 +14,7 @@ public interface AuthService {
 	DataResult<AuthenticationResponse> registerEmployer(CreateEmployerRequest employerRequest);
 	DataResult<AuthenticationResponse> registerHrmsAdmin(CreateHrmsAdminRequest hrmsAdminRequest);
 	DataResult<AuthenticationResponse> login(LoginRequest loginRequest);
+
 	Result verifyEmail(int userId);
 	Result verifyEmployer(int userId);
 }

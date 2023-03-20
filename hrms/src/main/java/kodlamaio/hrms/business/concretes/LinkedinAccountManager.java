@@ -75,14 +75,14 @@ public class LinkedinAccountManager implements LinkedinAccountService {
 		if (accountAddress.contains("https://linkedin.com/") || accountAddress.contains("linkedin.com/")) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.checkAccountAddress);
+		return new ErrorResult(Message.CHECK_ACCOUNT_ADDRESS);
 	}
 	
 	private Result checkAccountExist(int id) {
 		if (this.linkedinAccountRepository.existsLinkedinAccountByIdEquals(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.accountNotFound);
+		return new ErrorResult(Message.ACCOUNT_NOT_FOUND);
 	}
 	
 	private void updateAccount(LinkedinAccount linkedinAccount, UpdateLinkedinAccountRequest updatelinkedinRequest) {

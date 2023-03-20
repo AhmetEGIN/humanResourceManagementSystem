@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfiguration {
 	private final JwtAuthenticationFilter jwtAuthenticatoinFilter;
 	private final AuthenticationProvider authenticationProvider;
+
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -52,21 +53,26 @@ public class SecurityConfiguration {
 						"/configuration/ui",
 						"/configuration/security"
 						).permitAll()
-				.requestMatchers("/**").permitAll()
+//				.requestMatchers("/**").permitAll()
 				.requestMatchers("/api/auth/**").permitAll()
 				.anyRequest()
 				.authenticated()
 				)
+		
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
+		.formLogin()
+		.and()
 		.addFilterBefore(jwtAuthenticatoinFilter, UsernamePasswordAuthenticationFilter.class)
 		.authenticationProvider(authenticationProvider);
+
 
 		
 		return httpSecurity.build();
 	}
 	
+
 	
 	
 }

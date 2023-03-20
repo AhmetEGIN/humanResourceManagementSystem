@@ -40,6 +40,7 @@ public class AuthController {
 	private AuthService authService;
 	private UserService userService;
 
+
 	@Autowired
 	public AuthController(AuthService authService, UserService userService) {
 		this.authService = authService;
@@ -51,7 +52,8 @@ public class AuthController {
 
 		return ResponseEntity.ok(this.authService.registerEmployee(employeeRequest));
 	}
-
+	
+	
 	@PostMapping("/registeremployer")
 	public ResponseEntity<?> registerEmployer(@Valid @RequestBody CreateEmployerRequest employerRequest) {
 		return ResponseEntity.ok(this.authService.registerEmployer(employerRequest));
@@ -91,15 +93,6 @@ public class AuthController {
 		return new SuccessDataResult<User>(result.getData());
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public ErrorDataResult<Object> handleValidationException(MethodArgumentNotValidException exceptions) {
-		Map<String, String> validationErrors = new HashMap<String, String>();
-		for (FieldError fieldError : exceptions.getBindingResult().getFieldErrors()) {
-			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
-		}
-		ErrorDataResult<Object> errors = new ErrorDataResult<Object>(validationErrors, "Doğrulama hataları");
-		return errors;
-	}
+
 
 }

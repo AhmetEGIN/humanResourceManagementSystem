@@ -38,7 +38,7 @@ public class ImageManager implements ImageService {
 		image.setImagePath(uploadResult.getData());
 		image.setId(0);
 		imageRepository.save(image);
-		return new SuccessResult(Message.imageAdded);
+		return new SuccessResult(Message.IMAGE_ADDED);
 	}
 
 }

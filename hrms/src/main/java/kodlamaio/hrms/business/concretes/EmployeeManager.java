@@ -1,11 +1,9 @@
 package kodlamaio.hrms.business.concretes;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import kodlamaio.hrms.business.abstracts.EmployeeService;
@@ -58,7 +56,7 @@ public class EmployeeManager implements EmployeeService {
 		}
 		Employee employee = mapperService.forRequest().map(employeeRequest, Employee.class);
 		employeeRepository.save(employee);
-		return new SuccessResult(Message.employeeAdded);
+		return new SuccessResult(Message.EMPLOYEE_ADDED);
 	}
 
 	@Override
@@ -96,7 +94,7 @@ public class EmployeeManager implements EmployeeService {
 	public Result delete(int id) {
 		Employee employee = employeeRepository.getReferenceById(id);
 		employeeRepository.delete(employee);
-		return new SuccessResult(Message.employeeDeleted);
+		return new SuccessResult(Message.EMPLOYEE_DELETED);
 	}
 	@Override
 	public DataResult<GetEmployeeResponse> getEmployeeDetails(int employeeId) {
@@ -110,7 +108,7 @@ public class EmployeeManager implements EmployeeService {
 		if (employeeRequest.getFirstName().isBlank() && employeeRequest.getLastName().isBlank()
 				&& employeeRequest.getIdentityNumber().isBlank() && employeeRequest.getBirthYear() == 0
 				&& employeeRequest.getPassword().isBlank() && employeeRequest.getConfirmPassword().isBlank()) {
-			return new ErrorResult(Message.requiredFieldEmpty);
+			return new ErrorResult(Message.REQUIRED_FIELD_EMPTY);
 		}
 		return new SuccessResult();
 	}
@@ -119,7 +117,7 @@ public class EmployeeManager implements EmployeeService {
 		if (userCheckService.checkPerson(firstName, lastName, identityNumber, birthYear).isSuccess()) {
 			return new SuccessResult();	
 		}
-		return new ErrorResult(Message.personIsNotReal);
+		return new ErrorResult(Message.PERSON_IS_NOT_REAL);
 	}
 
 	private Result isEmailExist(String email) {
@@ -127,14 +125,14 @@ public class EmployeeManager implements EmployeeService {
 			return new SuccessResult();
 		}
 		
-		return new ErrorResult(Message.emailAlreadyExist);
+		return new ErrorResult(Message.EMAIL_ALREADY_EXISTS);
 	}
 
 	private Result isIdentityNumberExist(String identityNumber) {
 		if (!employeeRepository.existsEmployeeByIdentityNumberEquals(identityNumber)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.identityNumberAlreadyExist);
+		return new ErrorResult(Message.IDENTITY_NUMBER_ALREADY_EXIST);
 	}
 	
 	private Result updateEmployee(Employee employee, UpdateEmployeeRequest employeeRequest) {

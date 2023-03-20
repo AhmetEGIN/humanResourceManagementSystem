@@ -76,14 +76,14 @@ public class GithubAccountManager implements GithubAccountService {
 		if (accountAddress.contains("https://github.com/") || accountAddress.contains("github.com/")) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.checkAccountAddress);
+		return new ErrorResult(Message.CHECK_ACCOUNT_ADDRESS);
 	}
 	
 	private Result checkAccountExist(int id) {
 		if (this.githubAccountRepository.existsGithubAccountByIdEquals(id)) {
 			return new SuccessResult();
 		}
-		return new ErrorResult(Message.accountNotFound);
+		return new ErrorResult(Message.ACCOUNT_NOT_FOUND);
 	}
 	
 	private void updateAccount(GithubAccount githubAccount, UpdateGithubAccountRequest updateGithubRequest) {
